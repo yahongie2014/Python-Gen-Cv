@@ -18,7 +18,7 @@ class PDF(FPDF):
             self.set_xy(40, 20)
             self.set_font("Arial", '', 14)
             self.set_text_color(50, 50, 50)
-            self.cell(0, 10, "Full-Stack Software Developer", ln=True, align="L")
+            self.cell(0, 10, "Senior Full-Stack Software Developer", ln=True, align="L")
 
             # Draw a horizontal line to separate the header
             self.set_draw_color(200, 200, 200)
@@ -120,8 +120,9 @@ experiences = {
         "Company": "Future Group (UnitLabs)",
         "Duration": "Feb 2022 - Present",
         "Responsibilities": [
-            "Led a team of 6 engineers, delivering 10+ web and mobile solutions with zero downtime.",
+            "Led a team of 3 engineers, delivering 10+ web and mobile solutions with zero downtime.",
             "Improved system performance by 25% by optimizing APIs.",
+            "Create AI Models With python to help translator in CRM.",
             "Spearheaded the migration to PHP 8.0 and Laravel, enhancing code maintainability."
         ]
     },
@@ -129,9 +130,9 @@ experiences = {
         "Company": "Aramco Fal",
         "Duration": "Feb 2022 - June 2022",
         "Responsibilities": [
-            "Developed a secure e-commerce platform serving 20,000+ daily users.",
+            "Developed a secure CRM platform serving 20,000+ Employee.",
             "Integrated payment gateways, reducing transaction failures by 15%.",
-            "Automated deployment processes, saving 10 hours/week in manual efforts."
+            "Automated deployment processes, saving more than 10 hours/week in manual efforts."
         ]
     },
     "SR PHP Developer": {
@@ -184,16 +185,16 @@ certifications = """
 
 projects = [
     {
-        "Title": "Ratbli, SaaeiApp, and BlueAge",
-        "Description": "Developed and launched three businesses in KSA, leading a team of 5 engineers."
+        "Title": "Ratbli, SaaeiApp, and BlueAge,etc..",
+        "Description": "Developed and launched businesses in KSA, leading a team of 5 engineers."
     },
     {
-        "Title": "TPS and BexBeauty",
+        "Title": "SmartFurniture and BexBeauty,etc..",
         "Description": "Designed scalable e-commerce platforms used by 20,000+ active customers."
     },
     {
-        "Title": "SmartFurniture",
-        "Description": "Integrated AR technology, increasing sales conversion rates by 15%."
+        "Title": "TPS , FAL ,MaCledger",
+        "Description": "CRM Hub For Freelancers and more with Integrated AR technology and AI Models."
     },
     {
         "Title": "Open-Source Contributions",
