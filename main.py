@@ -17,7 +17,7 @@ class PDF(FPDF):
             self.is_first_page = False
 
     def section_title(self, title):
-        self.set_font("Arial", "B", 14)
+        self.set_font("Arial", "B", 12)
         self.set_text_color(0, 0, 128)
         self.cell(0, 10, title, ln=True)
         self.ln(5)
@@ -51,27 +51,22 @@ class PDF(FPDF):
             self.ln(5)
 
     def section_projects(self, projects):
-        self.set_font ("Arial", "B", 14)
-        self.set_text_color (0, 0, 128)
-        self.cell (0, 10, "Projects", ln=True)
-        self.ln (5)
-        self.set_text_color (0, 0, 0)
+        self.set_font("Arial", "B", 14)
+        self.set_text_color(0, 0, 128)
+        self.cell(0, 10, "Projects", ln=True)
+        self.ln(5)
+        self.set_text_color(0, 0, 0)
 
         for project in projects:
             # Title
-            self.set_font ("Arial", "B", 12)
-            self.cell (0, 10, project["Title"], ln=True)
+            self.set_font("Arial", "B", 10)
+            self.cell(0, 10, project["Title"], ln=True)
 
             # Details
-            self.set_font ("Arial", "", 12)
-            self.cell (10)  # Indentation
-            self.multi_cell (0, 10, f"{project['Description']}")
-            self.ln (3)
-
-    def section_divider(self):
-        self.set_draw_color(169, 169, 169)  # Light gray
-        self.line(10, self.get_y(), 200, self.get_y())
-        self.ln(5)
+            self.set_font("Arial", "", 9)
+            self.cell(10)
+            self.multi_cell(0, 10, f"{project['Description']}")
+            self.ln(3)
 
     def footer(self):
         if self.page_no() == self.last_page_number:
@@ -80,7 +75,10 @@ class PDF(FPDF):
             self.set_text_color(128, 128, 128)
             self.cell(0, 10, '"The only way to do great work is to love what you do." - Steve Jobs', align="C")
 
-# Input Data (same as provided)
+    def section_divider(self):
+        self.set_draw_color(169, 169, 169)  # Light gray
+        self.line(10, self.get_y(), 200, self.get_y())
+        self.ln(5)
 
 # Generate PDF
 pdf = PDF()
@@ -97,8 +95,7 @@ pdf.ln(10)
 # Professional Summary
 pdf.section_title("Professional Summary")
 pdf.section_body(
-    """Innovative software engineer with over 13 years of experience in PHP, JavaScript, and Python.
-    Adept at designing scalable APIs and CMS platforms, with a proven history of delivering high-quality software solutions."""
+"""Innovative Software Engineer with 13+ years of experience in PHP, JavaScript, and Python, adept at designing scalable APIs and CMS platforms, with a proven history of delivering high-quality Software Solutions"""
 )
 pdf.section_divider()
 
@@ -198,10 +195,6 @@ pdf.section_title("Technical Skills")
 pdf.section_body(skills)
 pdf.section_divider()
 
-# Professional Experience
-pdf.section_experience(experiences)
-pdf.section_divider()
-
 # Education
 pdf.section_title("Education")
 pdf.section_body(education)
@@ -211,6 +204,12 @@ pdf.section_divider()
 pdf.section_title("Certifications")
 pdf.section_body(certifications)
 pdf.section_divider()
+
+
+# Professional Experience
+pdf.section_experience(experiences)
+pdf.section_divider()
+
 
 # Projects
 pdf.section_projects(projects)
