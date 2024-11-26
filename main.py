@@ -23,13 +23,13 @@ class PDF(FPDF):
         self.ln(5)
 
     def section_body(self, body):
-        self.set_font("Arial", "", 12)
+        self.set_font("Arial", "", 10)
         self.set_text_color(0, 0, 0)
         self.multi_cell(0, 10, body)
         self.ln(5)
 
     def section_experience(self, experiences):
-        self.set_font("Arial", "B", 14)
+        self.set_font("Arial", "B", 12)
         self.set_text_color(0, 0, 128)
         self.cell(0, 10, "Professional Experience", ln=True)
         self.ln(5)
@@ -37,14 +37,14 @@ class PDF(FPDF):
 
         for role, details in experiences.items():
             # Role and Company
-            self.set_font("Arial", "B", 12)
+            self.set_font("Arial", "B", 10)
             self.cell(0, 10, f"{role}", ln=True)
-            self.set_font("Arial", "I", 12)
+            self.set_font("Arial", "I", 10)
             self.cell(0, 10, f"{details['Company']} | {details['Duration']}", ln=True)
             self.ln(3)
 
             # Responsibilities
-            self.set_font("Arial", "", 12)
+            self.set_font("Arial", "", 9)
             for responsibility in details['Responsibilities']:
                 self.cell(10)  # Indentation
                 self.multi_cell(0, 10, f"- {responsibility}")
