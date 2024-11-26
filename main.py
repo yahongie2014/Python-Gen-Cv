@@ -7,7 +7,6 @@ class PDF(FPDF):
         super().__init__()
         self.is_first_page = True
         self.last_page_number = None
-        self.add_font('DejaVu', '', './DejaVuSans.ttf', uni=True)
 
     def header(self):
         if self.is_first_page:
@@ -17,8 +16,8 @@ class PDF(FPDF):
             self.set_font("Arial", '', 20)
             self.cell(0, 10, "Ahmed Saeed", ln=True, align="L")
             self.set_xy(40, 20)
-            self.set_font ("DejaVu", '', 14)
-            self.set_text_color (50, 50, 50)
+            self.set_font("Arial", '', 14)
+            self.set_text_color(50, 50, 50)
             self.cell(0, 10, "Full-Stack Software Developer", ln=True, align="L")
 
             # Draw a horizontal line to separate the header
@@ -31,8 +30,8 @@ class PDF(FPDF):
     def contact_info(self):
         self.ln(10)
         self.set_font("Arial", "", 12)
-        self.cell(0, 10, "Phone: +20 10 9195 0488   |   Email: a.saeed@null.net", ln=True, align="C")
-        self.cell(0, 10, "LinkedIn: linkedin.com/in/devahmedsaeed   |   GitHub: github.com/yahongie2014", ln=True, align="C")
+        self.cell(0, 10, "Phone: +20 10 9195 0488  |  Email: a.saeed@null.net", ln=True, align="C")
+        self.cell(0, 10, "LinkedIn: linkedin.com/in/devahmedsaeed | GitHub: github.com/yahongie2014", ln=True, align="C")
         self.cell(0, 10, "Portfolio: coder79.me", ln=True, align="C")
         self.ln(10)
 
