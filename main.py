@@ -1,4 +1,5 @@
 from fpdf import FPDF
+from reportlab.pdfgen import canvas
 
 # Create a custom CV template using FPDF
 class PDF(FPDF):
@@ -6,21 +7,40 @@ class PDF(FPDF):
         super().__init__()
         self.is_first_page = True
         self.last_page_number = None
+        self.add_font('DejaVu', '', './DejaVuSans.ttf', uni=True)
 
     def header(self):
         if self.is_first_page:
-            self.set_font("Arial", "B", 20)
-            self.cell(0, 10, "Ahmed Saeed", ln=True, align="C")
-            self.set_font("Arial", "", 14)
-            self.cell(0, 10, "Full-Stack Software Developer", ln=True, align="C")
-            self.ln(10)
+            self.image('./me.png', 10, 10, 18)
+            # Add name and title
+            self.set_xy(40, 10)
+            self.set_font("Arial", '', 20)
+            self.cell(0, 10, "Ahmed Saeed", ln=True, align="L")
+            self.set_xy(40, 20)
+            self.set_font ("DejaVu", '', 14)
+            self.set_text_color (50, 50, 50)
+            self.cell(0, 10, "Full-Stack Software Developer", ln=True, align="L")
+
+            # Draw a horizontal line to separate the header
+            self.set_draw_color(200, 200, 200)
+            self.set_line_width(0.5)
+            self.line(10, 35, 200, 35)
+
             self.is_first_page = False
 
+    def contact_info(self):
+        self.ln(10)
+        self.set_font("Arial", "", 12)
+        self.cell(0, 10, "Phone: +20 10 9195 0488   |   Email: a.saeed@null.net", ln=True, align="C")
+        self.cell(0, 10, "LinkedIn: linkedin.com/in/devahmedsaeed   |   GitHub: github.com/yahongie2014", ln=True, align="C")
+        self.cell(0, 10, "Portfolio: coder79.me", ln=True, align="C")
+        self.ln(10)
+
     def section_title(self, title):
+        self.ln(2)
         self.set_font("Arial", "B", 12)
         self.set_text_color(0, 0, 128)
         self.cell(0, 10, title, ln=True)
-        self.ln(5)
 
     def section_body(self, body):
         self.set_font("Arial", "", 10)
@@ -29,11 +49,12 @@ class PDF(FPDF):
         self.ln(5)
 
     def section_experience(self, experiences):
+        self.ln(2)
         self.set_font("Arial", "B", 12)
         self.set_text_color(0, 0, 128)
         self.cell(0, 10, "Professional Experience", ln=True)
-        self.ln(5)
         self.set_text_color(0, 0, 0)
+        self.ln(2)
 
         for role, details in experiences.items():
             # Role and Company
@@ -86,11 +107,7 @@ pdf.set_auto_page_break(auto=True, margin=15)
 pdf.add_page()
 
 # Contact Information Section
-pdf.set_font("Arial", "I", 12)
-pdf.cell(0, 10, "Contact: +20 10 9195 0488 | Email: a.saeed@null.net", ln=True, align="C")
-pdf.cell(0, 10, "LinkedIn: linkedin.com/in/devahmedsaeed | GitHub: github.com/yahongie2014", ln=True, align="C")
-pdf.cell(0, 10, "Portfolio: coder79.me", ln=True, align="C")
-pdf.ln(10)
+pdf.contact_info()
 
 # Professional Summary
 pdf.section_title("Professional Summary")
