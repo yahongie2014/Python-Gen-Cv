@@ -5,7 +5,7 @@ class PDF(FPDF):
     def __init__(self):
         super().__init__()
         self.is_first_page = True
-        self.last_page_number = None 
+        self.last_page_number = None
 
     def header(self):
         if self.is_first_page:
@@ -130,7 +130,7 @@ experiences = {
             "Trained 5 junior developers, fostering a collaborative team culture."
         ]
     },
-    "MD PHP Developer": {
+    "MD-PHP Dev": {
         "Company": "ITSMART Corporation",
         "Duration": "April 2016 - Dec 2018",
         "Responsibilities": [
@@ -139,7 +139,7 @@ experiences = {
             "Trained 5 junior developers, fostering a collaborative team culture."
         ]
     },
-    "MD PHP Developer": {
+    "MD-PHP Developer": {
         "Company": "Gobus Corporation",
         "Duration": "March 2015 - Feb 2016",
         "Responsibilities": [
