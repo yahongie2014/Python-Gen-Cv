@@ -10,7 +10,6 @@ This repository contains a Python script that generates a professional CV using 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Output Example](#output-example)
-- [Customization](#customization)
 - [License](#license)
 - [Contributing](#contributing)
 - [Contact](#contact)
