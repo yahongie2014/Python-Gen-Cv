@@ -5,6 +5,7 @@ class PDF(FPDF):
     def __init__(self):
         super().__init__()
         self.is_first_page = True
+        self.last_page_number = None 
 
     def header(self):
         if self.is_first_page:
@@ -14,13 +15,6 @@ class PDF(FPDF):
             self.cell(0, 10, "Full-Stack Software Developer", ln=True, align="C")
             self.ln(10)
             self.is_first_page = False
-
-    def footer(self):
-        if self.page_no() == self.page:
-            self.set_y(-15)
-            self.set_font("Arial", "I", 10)
-            self.set_text_color(128, 128, 128)
-            self.cell (0, 10, '"The only way to do great work is to love what you do." - Steve Jobs', align="C")
 
     def section_title(self, title):
         self.set_font("Arial", "B", 14)
@@ -74,12 +68,17 @@ class PDF(FPDF):
             self.multi_cell (0, 10, f"{project['Description']}")
             self.ln (3)
 
-
     def section_divider(self):
         self.set_draw_color(169, 169, 169)  # Light gray
         self.line(10, self.get_y(), 200, self.get_y())
         self.ln(5)
 
+    def footer(self):
+        if self.page_no() == self.last_page_number:
+            self.set_y(-15)
+            self.set_font("Arial", "I", 10)
+            self.set_text_color(128, 128, 128)
+            self.cell(0, 10, '"The only way to do great work is to love what you do." - Steve Jobs', align="C")
 
 # Input Data (same as provided)
 
@@ -221,6 +220,8 @@ pdf.section_divider()
 pdf.section_title("Languages")
 pdf.section_body(languages)
 
+
+pdf.last_page_number = pdf.page_no()
 
 # Output PDF
 output_path = "./Ahmed-Saeed(SR).pdf"
