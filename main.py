@@ -2,7 +2,7 @@ from fpdf import FPDF
 from PIL import Image, ImageDraw
 
 
-def make_image_rounded(input_path, output_path, size=(80, 80)):
+def make_image_rounded(input_path, output_path, size=(150, 150)):
     img = Image.open(input_path).convert("RGBA")
     img = img.resize(size, Image.Resampling.LANCZOS)
 
@@ -27,7 +27,6 @@ class PDF(FPDF):
 
     def header(self):
         if self.is_first_page:
-            # Add a rounded image
             rounded_image_path = './me_rounded.png'
             make_image_rounded('./me.png', rounded_image_path)
 
@@ -47,12 +46,9 @@ class PDF(FPDF):
             self.set_font("Arial", '', 14)
             self.set_text_color(50, 50, 50)
             self.cell(0, 10, "Senior Full-Stack Software Developer", ln=True, align="L")
-
-            # Draw a horizontal line to separate the header
-            self.set_draw_color (200, 200, 200)
-            self.set_line_width (0.5)
-            self.line (10, 35, 200, 35)
-
+            self.set_draw_color(200, 200, 200)
+            self.set_line_width(0.5)
+            self.line(10, 35, 200, 35)
             self.is_first_page = False
 
     def contact_info(self):
