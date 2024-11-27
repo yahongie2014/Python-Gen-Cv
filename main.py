@@ -1,5 +1,21 @@
 from fpdf import FPDF
-from reportlab.pdfgen import canvas
+from PIL import Image, ImageDraw
+
+
+def make_image_rounded(input_path, output_path, size=(80, 80)):
+    img = Image.open(input_path).convert("RGBA")
+    img = img.resize(size, Image.Resampling.LANCZOS)
+
+    # Create a circular mask
+    mask = Image.new("L", size, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.ellipse((0, 0) + size, fill=255)
+
+    # Apply the mask to the image
+    rounded = Image.new("RGBA", size)
+    rounded.paste(img, (0, 0), mask=mask)
+    rounded.save(output_path)
+
 
 # Create a custom CV template using FPDF
 class PDF(FPDF):
@@ -8,9 +24,21 @@ class PDF(FPDF):
         self.is_first_page = True
         self.last_page_number = None
 
+
     def header(self):
         if self.is_first_page:
-            self.image('./me.png', 10, 10, 18)
+            # Add a rounded image
+            rounded_image_path = './me_rounded.png'
+            make_image_rounded('./me.png', rounded_image_path)
+
+            # Insert the image
+            self.image(rounded_image_path, 10, 10, 25)
+
+            # Add a circular frame around the image
+            # self.set_draw_color(50, 50, 50)
+            # self.set_line_width(0.5)
+            # self.ellipse(10, 10, 25,20)
+
             # Add name and title
             self.set_xy(40, 10)
             self.set_font("Arial", '', 20)
@@ -21,9 +49,9 @@ class PDF(FPDF):
             self.cell(0, 10, "Senior Full-Stack Software Developer", ln=True, align="L")
 
             # Draw a horizontal line to separate the header
-            self.set_draw_color(200, 200, 200)
-            self.set_line_width(0.5)
-            self.line(10, 35, 200, 35)
+            self.set_draw_color (200, 200, 200)
+            self.set_line_width (0.5)
+            self.line (10, 35, 200, 35)
 
             self.is_first_page = False
 
