@@ -1,11 +1,30 @@
+import requests
 from fpdf import FPDF
 from PIL import Image, ImageDraw
 from datetime import datetime
+import os
 
 
+# Function to download icons from URL
+def download_icon(url, icon_name):
+    """Download icon and save to disk as PNG"""
+    response = requests.get(url)
+    if response.status_code == 200:
+        with open(icon_name, 'wb') as f:
+            f.write(response.content)
+
+        # Open the image to check its format and ensure it is in PNG format
+        img = Image.open(icon_name)
+
+        # Convert to PNG if it's not already in PNG format
+        if img.format != 'PNG':
+            img.save(icon_name, 'PNG')
+
+
+# Function to make an image rounded (optional for profile image)
 def make_image_rounded(input_path, output_path, size=(150, 150)):
     img = Image.open(input_path).convert("RGBA")
-    img = img.resize(size, Image.Resampling.LANCZOS)
+    img = img.resize(size, Image.LANCZOS)
 
     # Create a circular mask
     mask = Image.new("L", size, 0)
@@ -33,11 +52,6 @@ class PDF(FPDF):
             # Insert the image
             self.image(rounded_image_path, 10, 10, 25)
 
-            # Add a circular frame around the image
-            # self.set_draw_color(50, 50, 50)
-            # self.set_line_width(0.5)
-            # self.ellipse(10, 10, 25,20)
-
             # Add name and title
             self.set_xy(40, 10)
             self.set_font("Arial", '', 20)
@@ -55,17 +69,36 @@ class PDF(FPDF):
         self.ln(10)
         self.set_font("Arial", "", 12)
 
-        # Phone and Email as regular text
+        # Center the phone and email text
         self.cell(0, 10, "Phone: +20 10 9195 0488  |  Email: a.saeed@null.net", ln=True, align="C")
 
-        self.set_text_color(0, 0, 255)
-        self.set_font("Arial", "U", 12)
-        self.cell(0, 10, "LinkedIn: ", ln=True, align="C", link="https://linkedin.com/in/devahmedsaeed")
+        # Set up text color and font for the links
+        self.set_text_color(0, 0, 255)  # Blue color for links
+        self.set_font("Arial", "U", 12)  # Underlined for links
 
-        # GitHub with clickable URL
-        self.cell(0, 10, "GitHub: ", ln=True, align="C", link="https://github.com/yahongie2014")
+        # Center the LinkedIn, GitHub, Portfolio with their respective icons
+        icon_size = 10  # Size of the icons
+        icon_y_position = self.get_y()
 
-        self.cell(0, 10, "Portfolio: ", ln=True, align="C", link="http://coder79.me")
+        # Download the icons automatically and save them in PNG format
+        download_icon("https://upload.wikimedia.org/wikipedia/commons/0/01/LinkedIn_Logo_2023.png", "linkedin_icon.png")
+        download_icon("https://upload.wikimedia.org/wikipedia/commons/8/83/GitHub_Logo_2023.png", "github_icon.png")
+        download_icon("https://upload.wikimedia.org/wikipedia/commons/6/6c/Portfolio_icon.svg", "portfolio_icon.png")
+
+        # Check if icons are downloaded successfully
+        if os.path.exists("linkedin_icon.png") and os.path.exists("github_icon.png") and os.path.exists(
+                "portfolio_icon.png"):
+            # LinkedIn icon and link
+            self.image("linkedin_icon.png", x=40, y=icon_y_position, w=icon_size)
+            self.cell(0, 10, " LinkedIn ", ln=False, link="https://linkedin.com/in/devahmedsaeed")
+
+            # GitHub icon and link
+            self.image("github_icon.png", x=50 + icon_size, y=icon_y_position, w=icon_size)
+            self.cell(0, 10, " GitHub ", ln=False, link="https://github.com/yahongie2014")
+
+            # Portfolio icon and link
+            self.image("portfolio_icon.png", x=60 + 2 * icon_size, y=icon_y_position, w=icon_size)
+            self.cell(0, 10, " Portfolio ", ln=False, link="http://coder79.me")
 
         self.ln(10)
 
@@ -128,6 +161,42 @@ class PDF(FPDF):
             self.multi_cell(0, 10, f"{project['Description']}")
             self.ln(3)
 
+    def section_certifications(self, certifications):
+        self.set_font("Arial", "B", 14)
+        self.set_text_color(0, 0, 128)
+        self.cell(0, 10, "Certifications", ln=True)
+        self.ln(5)
+        self.set_text_color(0, 0, 0)
+
+        for certification in certifications:
+            self.set_font("Arial", "", 12)
+            self.multi_cell(0, 10, certification)
+            self.ln(3)
+
+    def section_education(self, education):
+        self.set_font("Arial", "B", 14)
+        self.set_text_color(0, 0, 128)
+        self.cell(0, 10, "Education", ln=True)
+        self.ln(5)
+        self.set_text_color(0, 0, 0)
+
+        for edu in education:
+            self.set_font("Arial", "", 12)
+            self.multi_cell(0, 10, edu)
+            self.ln(3)
+
+    def section_skills(self, skills):
+        self.set_font("Arial", "B", 14)
+        self.set_text_color(0, 0, 128)
+        self.cell(0, 10, "Skills", ln=True)
+        self.ln(5)
+        self.set_text_color(0, 0, 0)
+
+        for skill in skills:
+            self.set_font("Arial", "", 12)
+            self.multi_cell(0, 10, skill)
+            self.ln(3)
+
     def footer(self):
         if self.page_no() == self.last_page_number:
             self.set_y(-15)
@@ -159,6 +228,48 @@ def calculate_duration(start_date: str, end_date: str) -> str:
         return "Invalid dates"
 
 
+# Data
+certifications = [
+    "AWS Certified Developer Associate (2017)",
+    "Scrum Master Certification (2016)",
+    "Certified Microsoft Developer MSP (2013)"
+]
+
+projects = [
+    {
+        "Title": "Ratbli, SaaeiApp, and BlueAge,etc..",
+        "Description": "Developed and launched businesses in KSA, leading a team of 5 engineers."
+    },
+    {
+        "Title": "SmartFurniture and BexBeauty,etc..",
+        "Description": "Designed scalable e-commerce platforms used by 20,000+ active customers."
+    },
+    {
+        "Title": "TPS , FAL ,MaCledger",
+        "Description": "CRM Hub For Freelancers and more with Integrated AR technology and AI Models."
+    },
+    {
+        "Title": "Open-Source Contributions",
+        "Description": "Actively contributed to 80+ GitHub repositories, enhancing software functionality and documentation."
+    }
+]
+
+education = [
+    "Bachelor's Degree in MISE - Modern Academy Institute (Jan 2010 - May 2014)",
+    "Professional Diploma in Programming - YAT Center (2013 - 2014)",
+    "Professional Diploma in Web Development - Russian Culture Center (2014)"
+]
+
+skills = [
+    "Programming: PHP, JavaScript (Pure, Node.js), Python",
+    "Frameworks: Laravel, CakePHP , Symfony , Nextjs ,React Native, Django, Flask",
+    "CMS: Wordpress , Magento , Shopify , Laravel Nova",
+    "Tools: Git ,Docker, Kubernetes",
+    "Databases: MySQL, MongoDB, Firebase",
+    "Servers: AWS, DigitalOcean, Vercel,railway",
+    "Additional: Agile methodologies, API Documentation, Payment Systems Integration , Socket IO, Redis"
+]
+
 # Generate PDF
 pdf = PDF()
 pdf.set_auto_page_break(auto=True, margin=15)
@@ -174,7 +285,8 @@ pdf.section_body(
 )
 pdf.section_divider()
 
-experiences = {
+# Experience Section
+pdf.section_experience({
     "SR Full-Stack Dev (Team Lead)": {
         "Company": "Future Group (UnitLabs)",
         "Duration": "Feb 2022 - Present",
@@ -203,15 +315,6 @@ experiences = {
             "Trained 5 junior developers, fostering a collaborative team culture."
         ]
     },
-    "SR PHP Developer": {
-        "Company": "4Deve Corporation",
-        "Duration": "Jan 2019 - May 2020",
-        "Responsibilities": [
-            "Delivered 3 ERP systems, driving efficiency for KSA-based clients.",
-            "Reduced page load times by 40% through query optimization.",
-            "Trained 5 junior developers, fostering a collaborative team culture."
-        ]
-    },
     "SR-PHP Dev": {
         "Company": "ITSMART Corporation (Frame Work - Micro Services)",
         "Duration": "Oct 2016 - Jun 2018",
@@ -229,82 +332,20 @@ experiences = {
             "Focused on maintaining and developing core PHP-based solutions for travel services."
         ]
     }
-}
 
-education = """
- - Bachelor's Degree in MISE - Modern Academy Institute (Jan 2010 - May 2014)
- - Professional Diploma in Programming - YAT Center (2013 - 2014)
- - Professional Diploma in Web Development - Russian Culture Center (2014)
-"""
+})
 
-skills = """
- - Programming: PHP, JavaScript (Pure, Node.js), Python
- - Frameworks: Laravel, CakePHP , Symfony , Nextjs ,React Native, Django, Flask
- - CMS: Wordpress , Magento , Shopify , Laravel Nova
- - Tools: Git ,Docker, Kubernetes
- - Databases: MySQL, MongoDB, Firebase
- - Servers: AWS, DigitalOcean, Vercel,railway
- - Additional: Agile methodologies, API Documentation, Payment Systems Integration , Socket IO, Redis
-"""
+# Certifications Section
+pdf.section_certifications(certifications)
 
-certifications = """
- - AWS Certified Developer Associate (2017)
- - Scrum Master Certification (2016)
- - Certified Microsoft Developer MSP (2013)
-"""
-
-projects = [
-    {
-        "Title": "Ratbli, SaaeiApp, and BlueAge,etc..",
-        "Description": "Developed and launched businesses in KSA, leading a team of 5 engineers."
-    },
-    {
-        "Title": "SmartFurniture and BexBeauty,etc..",
-        "Description": "Designed scalable e-commerce platforms used by 20,000+ active customers."
-    },
-    {
-        "Title": "TPS , FAL ,MaCledger",
-        "Description": "CRM Hub For Freelancers and more with Integrated AR technology and AI Models."
-    },
-    {
-        "Title": "Open-Source Contributions",
-        "Description": "Actively contributed to 80+ GitHub repositories, enhancing software functionality and documentation."
-    }
-]
-
-languages = """
- - English: Fluent
- - Arabic: Native
-"""
-
-# Technical Skills
-pdf.section_title("Technical Skills")
-pdf.section_body(skills)
-pdf.section_divider()
-
-# Education
-pdf.section_title("Education")
-pdf.section_body(education)
-pdf.section_divider()
-
-# Certifications
-pdf.section_title("Certifications")
-pdf.section_body(certifications)
-pdf.section_divider()
-
-# Professional Experience
-pdf.section_experience(experiences)
-pdf.section_divider()
-
-# Projects
+# Projects Section
 pdf.section_projects(projects)
-pdf.section_divider()
 
-# Languages
-pdf.section_title("Languages")
-pdf.section_body(languages)
+# Education Section
+pdf.section_education(education)
 
-pdf.last_page_number = pdf.page_no()
+# Skills Section
+pdf.section_skills(skills)
 
 # Output PDF
 output_path = "./Ahmed-Saeed(SR).pdf"
