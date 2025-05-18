@@ -1,5 +1,6 @@
 from fpdf import FPDF
 from PIL import Image, ImageDraw
+from datetime import datetime
 
 
 def make_image_rounded(input_path, output_path, size=(150, 150)):
@@ -53,10 +54,19 @@ class PDF(FPDF):
     def contact_info(self):
         self.ln(10)
         self.set_font("Arial", "", 12)
+
+        # Phone and Email as regular text
         self.cell(0, 10, "Phone: +20 10 9195 0488  |  Email: a.saeed@null.net", ln=True, align="C")
-        self.cell(0, 10, "LinkedIn: linkedin.com/in/devahmedsaeed | GitHub: github.com/yahongie2014", ln=True,
-                  align="C")
-        self.cell(0, 10, "Portfolio: coder79.me", ln=True, align="C")
+
+        self.set_text_color(0, 0, 255)
+        self.set_font("Arial", "U", 12)
+        self.cell(0, 10, "LinkedIn: ", ln=True, align="C", link="https://linkedin.com/in/devahmedsaeed")
+
+        # GitHub with clickable URL
+        self.cell(0, 10, "GitHub: ", ln=True, align="C", link="https://github.com/yahongie2014")
+
+        self.cell(0, 10, "Portfolio: ", ln=True, align="C", link="http://coder79.me")
+
         self.ln(10)
 
     def section_title(self, title):
@@ -87,10 +97,16 @@ class PDF(FPDF):
             self.cell(0, 10, f"{details['Company']} | {details['Duration']}", ln=True)
             self.ln(3)
 
-            # Responsibilities
+            duration = calculate_duration(details['Duration'].split(' - ')[0],
+                                          details['Duration'].split(' - ')[1] if ' - ' in details[
+                                              'Duration'] else "Present")
+            self.set_font("Arial", "", 10)
+            self.cell(0, 10, f"Duration: {duration}", ln=True)
+            self.ln(3)
+
             self.set_font("Arial", "", 9)
             for responsibility in details['Responsibilities']:
-                self.cell(10)  # Indentation
+                self.cell(10)
                 self.multi_cell(0, 10, f"- {responsibility}")
             self.ln(5)
 
@@ -125,6 +141,24 @@ class PDF(FPDF):
         self.ln(5)
 
 
+def calculate_duration(start_date: str, end_date: str) -> str:
+    date_format = "%b %Y"
+
+    try:
+        start = datetime.strptime(start_date, date_format)
+        if end_date.lower() == "present":
+            end = datetime.today()
+        else:
+            end = datetime.strptime(end_date, date_format)
+
+        delta = end - start
+        years = delta.days // 365
+        months = (delta.days % 365) // 30
+        return f"{years} years, {months} months"
+    except Exception as e:
+        return "Invalid dates"
+
+
 # Generate PDF
 pdf = PDF()
 pdf.set_auto_page_break(auto=True, margin=15)
@@ -153,7 +187,7 @@ experiences = {
     },
     "SR Full-Stack Dev": {
         "Company": "Aramco Fal",
-        "Duration": "Feb 2020 - JUL 2020",
+        "Duration": "Feb 2020 - Jul 2020",
         "Responsibilities": [
             "Developed a secure CRM platform serving 20,000+ Employee.",
             "Integrated payment gateways, reducing transaction failures by 15%.",
