@@ -24,7 +24,6 @@ class PDF(FPDF):
         self.is_first_page = True
         self.last_page_number = None
 
-
     def header(self):
         if self.is_first_page:
             rounded_image_path = './me_rounded.png'
@@ -55,7 +54,8 @@ class PDF(FPDF):
         self.ln(10)
         self.set_font("Arial", "", 12)
         self.cell(0, 10, "Phone: +20 10 9195 0488  |  Email: a.saeed@null.net", ln=True, align="C")
-        self.cell(0, 10, "LinkedIn: linkedin.com/in/devahmedsaeed | GitHub: github.com/yahongie2014", ln=True, align="C")
+        self.cell(0, 10, "LinkedIn: linkedin.com/in/devahmedsaeed | GitHub: github.com/yahongie2014", ln=True,
+                  align="C")
         self.cell(0, 10, "Portfolio: coder79.me", ln=True, align="C")
         self.ln(10)
 
@@ -124,6 +124,7 @@ class PDF(FPDF):
         self.line(10, self.get_y(), 200, self.get_y())
         self.ln(5)
 
+
 # Generate PDF
 pdf = PDF()
 pdf.set_auto_page_break(auto=True, margin=15)
@@ -135,7 +136,7 @@ pdf.contact_info()
 # Professional Summary
 pdf.section_title("Professional Summary")
 pdf.section_body(
-"""Innovative Software Engineer with 13+ years of experience in PHP, JavaScript, and Python, adept at designing scalable APIs and CMS platforms, with a proven history of delivering high-quality Software Solutions"""
+    """Innovative Software Engineer with 13+ years of experience in PHP, JavaScript, and Python, adept at designing scalable APIs and CMS platforms, with a proven history of delivering high-quality Software Solutions"""
 )
 pdf.section_divider()
 
@@ -152,11 +153,20 @@ experiences = {
     },
     "SR Full-Stack Dev": {
         "Company": "Aramco Fal",
-        "Duration": "Feb 2022 - June 2022",
+        "Duration": "Feb 2020 - JUL 2020",
         "Responsibilities": [
             "Developed a secure CRM platform serving 20,000+ Employee.",
             "Integrated payment gateways, reducing transaction failures by 15%.",
             "Automated deployment processes, saving more than 10 hours/week in manual efforts."
+        ]
+    },
+    "Full Stack Dev": {
+        "Company": "MCLedger Corporation",
+        "Duration": "Mar 2018 - Aug 2019",
+        "Responsibilities": [
+            "Delivered 3 ERP systems, driving efficiency for EMIRATE-based clients.",
+            "Reduced page load times by 40% through query optimization.",
+            "Trained 5 junior developers, fostering a collaborative team culture."
         ]
     },
     "SR PHP Developer": {
@@ -168,18 +178,18 @@ experiences = {
             "Trained 5 junior developers, fostering a collaborative team culture."
         ]
     },
-    "MD-PHP Dev": {
-        "Company": "ITSMART Corporation",
-        "Duration": "April 2016 - Dec 2018",
+    "SR-PHP Dev": {
+        "Company": "ITSMART Corporation (Frame Work - Micro Services)",
+        "Duration": "Oct 2016 - Jun 2018",
         "Responsibilities": [
-            "Contributed to the development of an internal project with a team of developers.",
+            "Contributed to the development of an internal project with a team of developers. (Ratbli Project & Others)",
             "Reduced page load times by 40% through query optimization.",
             "Trained 5 junior developers, fostering a collaborative team culture."
         ]
     },
     "MD-PHP Developer": {
-        "Company": "Gobus Corporation",
-        "Duration": "March 2015 - Feb 2016",
+        "Company": "Arqqa Digital Agency (CMS - Native)",
+        "Duration": "Sept 2015 - Aug 2016",
         "Responsibilities": [
             "Contributed to the development of an internal project with a team of developers.",
             "Focused on maintaining and developing core PHP-based solutions for travel services."
@@ -195,10 +205,12 @@ education = """
 
 skills = """
  - Programming: PHP, JavaScript (Pure, Node.js), Python
- - Frameworks: Laravel, React Native, Django, Flask
- - Tools: Docker, Kubernetes, Git, AWS
+ - Frameworks: Laravel, CakePHP , Symfony , Nextjs ,React Native, Django, Flask
+ - CMS: Wordpress , Magento , Shopify , Laravel Nova
+ - Tools: Git ,Docker, Kubernetes
  - Databases: MySQL, MongoDB, Firebase
- - Additional: Agile methodologies, API Documentation, Payment Systems Integration
+ - Servers: AWS, DigitalOcean, Vercel,railway
+ - Additional: Agile methodologies, API Documentation, Payment Systems Integration , Socket IO, Redis
 """
 
 certifications = """
@@ -246,11 +258,9 @@ pdf.section_title("Certifications")
 pdf.section_body(certifications)
 pdf.section_divider()
 
-
 # Professional Experience
 pdf.section_experience(experiences)
 pdf.section_divider()
-
 
 # Projects
 pdf.section_projects(projects)
@@ -259,7 +269,6 @@ pdf.section_divider()
 # Languages
 pdf.section_title("Languages")
 pdf.section_body(languages)
-
 
 pdf.last_page_number = pdf.page_no()
 
